@@ -160,7 +160,7 @@ public class Util {
 			return mapData.isEmpty();
 		}
 
-		return true;
+		return false;
 	}
 
 	public static <T> T ifEmpty(T data, T defaultValue) {

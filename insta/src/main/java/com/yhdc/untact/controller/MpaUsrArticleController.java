@@ -13,6 +13,7 @@ import com.yhdc.untact.util.Util;
 
 @Controller
 public class MpaUsrArticleController {
+	
 	private int articleLastId;
 	private List<Article> articles;
 	
@@ -25,6 +26,15 @@ public class MpaUsrArticleController {
 	@RequestMapping("/mpaUsr/article/doWrite")
 	@ResponseBody
 	public ResultData doWrite(String title, String body) {
+		
+		if(Util.isEmpty(title)) {
+			return new ResultData("F-1", "제목을 작성해 주세요.");
+		}
+		
+		if(Util.isEmpty(body)) {
+			return new ResultData("F-2", "내용을 작성해 주세요.");
+		}
+		
 		int id = writeArticle(title, body);
 		Article article = getArticleById(id);
 		
@@ -34,7 +44,7 @@ public class MpaUsrArticleController {
 	
 	@RequestMapping("/mpaUsr/article/getArticle")
 	@ResponseBody
-	public ResultData getArticle(int id) {
+	public ResultData getArticle(Integer id) {
 		Article article = getArticleById(id);
 
 		if (article == null) {
@@ -47,7 +57,7 @@ public class MpaUsrArticleController {
 	
 	@RequestMapping("/mpaUsr/article/doDelete")
 	@ResponseBody
-	public ResultData doDelete(int id) {
+	public ResultData doDelete(Integer id) {
 		boolean delete = deleteArticleById(id);
 
 		if (delete == false) {
@@ -58,15 +68,52 @@ public class MpaUsrArticleController {
 	}
 	
 	
-	
-	
-	
-//	Internal Methods
-	
-	private void makeTestData() {
-		for(int i = 0; i<3; i++) {
-			writeArticle("Title1", "Body1");
+	@RequestMapping("/mpaUsr/article/doModify")
+	@ResponseBody
+	public ResultData doModify(Integer id, String title, String body) {
+		
+		if(Util.isEmpty(id)) {
+			return new ResultData("F-1", "id을 작성해 주세요.");
 		}
+		
+		if(Util.isEmpty(title)) {
+			return new ResultData("F-1", "제목을 작성해 주세요.");
+		}
+		
+		if(Util.isEmpty(body)) {
+			return new ResultData("F-1", "내용을 작성해 주세요.");
+		}		
+		
+		boolean modified = modifyArticle(id, title, body);
+
+		if (modified == false) {
+			return new ResultData("F-1", id + "번 글은 존재하지 않습니다.", "id", id);
+		}
+		return new ResultData("S-1", id + "번 글이 수정되었습다.", "Article", getArticleById(id));
+	}
+	
+	
+	
+//	Internal Methods	
+	private void makeTestData() {
+		for(int i = 0; i<5; i++) {
+			writeArticle("Title", "Body");
+		}
+	}
+	
+	
+	private boolean modifyArticle(Integer id, String title, String body) {
+		String newDate = Util.getNowDateStr();
+		Article article = getArticleById(id);
+		
+		if(article.getId() == id) {
+			article.setTitle(title);
+			article.setBody(body);
+			article.setUpdateDate(newDate);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	
