@@ -1,6 +1,8 @@
-package com.yhdc.untact.util;
+package com.yhdc.untact.dto;
 
 import java.util.Map;
+
+import com.yhdc.untact.util.Util;
 
 import lombok.Data;
 
@@ -15,6 +17,7 @@ public class ResultData {
 		this.msg = msg;
 		this.body = Util.mapOf(args);
 	}
+		
 
 	public boolean isSuccess() {
 		return resultCode.startsWith("S-");
