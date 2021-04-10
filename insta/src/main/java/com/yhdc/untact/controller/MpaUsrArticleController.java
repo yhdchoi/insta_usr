@@ -1,11 +1,14 @@
 package com.yhdc.untact.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yhdc.untact.dto.Article;
+import com.yhdc.untact.dto.Board;
 import com.yhdc.untact.dto.ResultData;
 import com.yhdc.untact.service.ArticleService;
 import com.yhdc.untact.util.Util;
@@ -15,10 +18,60 @@ public class MpaUsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	// MSG
+	private String msgBack(HttpServletRequest req, String msg) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("historyBack", true);
+		return "common/redirect";
+	}
+	
+	private String msgReplace(HttpServletRequest req, String msg, String replaceUrl) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("replaceUrl", replaceUrl);
+		return "common/redirect";
+	}
+	
+		
+	// LIST
+	@RequestMapping("/usr/article/doGetList")
+	public String doGetList(HttpServletRequest req, int boardId) {
+		Board board = articleService.getBoardById(boardId);
+		
+		if (board == null) {
+			return msgBack(req, boardId + "번 게시판은 존제하지 않습니다.");
+		}
+		req.setAttribute("board", board);
+		
+		int totalArticleCount = articleService.getArticleCount(boardId);
+		
+		req.setAttribute("totalArticleCount", totalArticleCount);
+		
+		return "/usr/article/doGetlist";
+	}
 
-	@RequestMapping("/mpaUsr/article/doWrite")
+	// GET
+	@RequestMapping("/mpaUsr/article/doGet")
 	@ResponseBody
-	public ResultData doWrite(String title, String body) {
+	public ResultData doGet(Integer id) {
+
+		if (Util.isEmpty(id)) {
+			return new ResultData("F-1", "번호를 입력해 주세요.");
+		}
+
+		Article article = articleService.getArticleById(id);
+
+		if (article == null) {
+			return new ResultData("F-1", id + "번 글은 존재하지 않습니다.", "id", id);
+		}
+
+		return new ResultData("S-1", article.getId() + "번 글 입니다.", "article", article);
+	}
+	
+	// WRITE
+	@RequestMapping("/mpaUsr/article/doPost")
+	@ResponseBody
+	public ResultData doPost(String title, String body) {
 
 		if (Util.isEmpty(title)) {
 			return new ResultData("F-1", "제목을 작성해 주세요.");
@@ -31,9 +84,10 @@ public class MpaUsrArticleController {
 		return articleService.writeArticle(title, body);
 	}
 
-	@RequestMapping("/mpaUsr/article/doModify")
+	// EDIT
+	@RequestMapping("/mpaUsr/article/doPut")
 	@ResponseBody
-	public ResultData doModify(Integer id, String title, String body) {
+	public ResultData doPut(Integer id, String title, String body) {
 
 		if (Util.isEmpty(id)) {
 			return new ResultData("F-1", "id을 작성해 주세요.");
@@ -52,35 +106,28 @@ public class MpaUsrArticleController {
 		if (article == null) {
 			return new ResultData("F-1", id + "번 글은 존재하지 않습니다.", "id", id);
 		}
-		return articleService.modifyArticle(id, title, body);
+		return articleService.editArticle(id, title, body);
 	}
 
+	// DELETE
 	@RequestMapping("/mpaUsr/article/doDelete")
-	@ResponseBody
-	public ResultData doDelete(Integer id) {
+	public String doDelete(HttpServletRequest req, Integer id) {
 
 		if (Util.isEmpty(id)) {
-			return new ResultData("F-1", "번호를 입력해 주세요.");
+			return msgBack(req, "번호를 입력해 주세요.");
 		}
+		
+		ResultData rd = articleService.deleteArticleById(id);
+		
+		if (rd.isFail()) {
+			return msgBack(req, rd.getMsg());
+		}
+		
+		String redirectUrl = "../aricle/doGetList?boardId=" + rd.getBody().get("boardId");
 
-		return articleService.deleteArticleById(id);
+		return msgReplace(req, rd.getMsg(), redirectUrl);
 	}
 
-	@RequestMapping("/mpaUsr/article/getArticle")
-	@ResponseBody
-	public ResultData getArticle(Integer id) {
 
-		if (Util.isEmpty(id)) {
-			return new ResultData("F-1", "번호를 입력해 주세요.");
-		}
-
-		Article article = articleService.getArticleById(id);
-
-		if (article == null) {
-			return new ResultData("F-1", id + "번 글은 존재하지 않습니다.", "id", id);
-		}
-
-		return new ResultData("S-1", article.getId() + "번 글 입니다.", "article", article);
-	}
 
 }

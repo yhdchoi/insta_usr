@@ -4,6 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yhdc.untact.dao.ArticleDao">
+
 	<insert id="writeArticle">
 		INSERT INTO article
 		SET regDate = NOW(),
@@ -14,7 +15,7 @@
 		body = #{body};
 	</insert>
 	
-	<update id="modifyArticle">
+	<update id="editArticle">
 		UPDATE article
 		SET updateDate = NOW(),
 		title = #{title},
@@ -29,14 +30,28 @@
 		WHERE id = #{id};
 	</update>
 	
+	<select id="getLastInsertId" resultType="Integer">
+		SELECT LAST_INSERT_ID();
+	</select>
+	
 	<select id="getArticleById" resultType="Article">
 		SELECT *
 		FROM article AS A
 		WHERE A.id = #{id};
 	</select>
 	
-	<select id="getLastInsertId">
-		SELECT LAST_INSERT_ID();
+	<select id="getBoardById" resultType="Board">
+		SELECT *
+		FROM board AS B
+		WHERE B.id = #{id}
+		AND B.delStatus = 0;
 	</select>
-
+	
+	<select id="getArticleCount" resultType="int">
+		SELECT COUNT(*) AS cnt
+		FROM article AS A
+		WHERE A.id = #{id}
+		AND A.delStatus = 0;
+	</select>
+	
 </mapper>

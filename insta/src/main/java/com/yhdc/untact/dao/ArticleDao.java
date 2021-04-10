@@ -4,11 +4,18 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.yhdc.untact.dto.Article;
+import com.yhdc.untact.dto.Board;
 
 @Mapper
 public interface ArticleDao {
 
 
+	Board getBoardById(@Param("boardId") int boardI);
+
+	int getLastInsertId();
+	
+	int getArticleCount(@Param("id") int id);
+	
 	public int writeArticle(@Param("boardId") int boardId, 
 			@Param("memberId") int memberId, 
 			@Param("title") String title, 
@@ -22,5 +29,4 @@ public interface ArticleDao {
 
 	public Article getArticleById(@Param("id") int id);
 	
-	int getLastInsertId();
 }
