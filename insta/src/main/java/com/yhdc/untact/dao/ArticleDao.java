@@ -1,5 +1,7 @@
 package com.yhdc.untact.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,5 +30,7 @@ public interface ArticleDao {
 	public void deleteArticleById(@Param("id") int id);
 
 	public Article getArticleById(@Param("id") int id);
+
+	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 	
 }

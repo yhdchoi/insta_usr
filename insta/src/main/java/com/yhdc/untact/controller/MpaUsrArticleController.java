@@ -1,10 +1,13 @@
 package com.yhdc.untact.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yhdc.untact.dto.Article;
@@ -35,7 +38,7 @@ public class MpaUsrArticleController {
 		
 	// LIST
 	@RequestMapping("/usr/article/doGetList")
-	public String doGetList(HttpServletRequest req, int boardId) {
+	public String doGetList(HttpServletRequest req, int boardId, @RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoardById(boardId);
 		
 		if (board == null) {
@@ -46,6 +49,21 @@ public class MpaUsrArticleController {
 		int totalArticleCount = articleService.getArticleCount(boardId);
 		
 		req.setAttribute("totalArticleCount", totalArticleCount);
+		
+		// MAX NUMBER OF POSTS IN A PAGE
+		int itemsInPage = 20;
+		// TOTAL NUMBER OF PAGE
+		int totalPage = (int) Math.ceil(totalArticleCount / (double) itemsInPage);
+
+		// CURRENT PAGE (TEMP)
+		req.setAttribute("page", page);
+		req.setAttribute("totalPage", totalPage);
+
+		List<Article> articles = articleService.getPrintArticles(boardId, itemsInPage, page);
+
+		System.out.println("articles : " + articles);
+
+		req.setAttribute("articles", articles);
 		
 		return "/usr/article/doGetlist";
 	}
