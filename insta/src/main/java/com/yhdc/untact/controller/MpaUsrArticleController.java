@@ -37,16 +37,21 @@ public class MpaUsrArticleController {
 
 	// LIST
 	@RequestMapping("/usr/article/list")
-	public String doGetList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String keyword,
+	public String doGetList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchType, String keyword,
 			@RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoardById(boardId);
+		
+		if (Util.isEmpty(searchType)) {
+			searchType = "titleAndContent";
+		}
 
 		if (board == null) {
 			return msgBack(req, boardId + "번 게시판은 존제하지 않습니다.");
 		}
+		
 		req.setAttribute("board", board);
 
-		int totalArticleCount = articleService.getArticleCount(boardId, keyword);
+		int totalArticleCount = articleService.getArticleCount(boardId, searchType, keyword);
 
 		if (keyword == null || keyword.trim().length() == 0) {
 
@@ -63,7 +68,7 @@ public class MpaUsrArticleController {
 		req.setAttribute("page", page);
 		req.setAttribute("totalPage", totalPage);
 
-		List<Article> articles = articleService.getPrintArticles(boardId, keyword, itemsInPage, page);
+		List<Article> articles = articleService.getPrintArticles(boardId, searchType, keyword, itemsInPage, page);
 
 		System.out.println("articles : " + articles);
 

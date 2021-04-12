@@ -37,14 +37,20 @@ public class ArticleService {
 		return articleDao.getArticleById(id);
 	}
 
-	public int getArticleCount(int boardId, String keyword) {
-		return articleDao.getArticleCount(boardId, keyword);
+	public int getArticleCount(int boardId, String searchType, String keyword) {
+		if (keyword != null && keyword.length() == 0) {
+			searchType = null;
+		}
+		return articleDao.getArticleCount(boardId, searchType, keyword);
 	}
 
-	public List<Article> getPrintArticles(int boardId, String keyword, int itemsInPage, int page) {
+	public List<Article> getPrintArticles(int boardId, String searchType, String keyword, int itemsInPage, int page) {
+		if (keyword != null && keyword.length() == 0) {
+			searchType = null;
+		}
 		int limitFrom = (page - 1) * itemsInPage;
 		int limitTake = itemsInPage;
-		return articleDao.getPrintArticles(boardId, keyword, limitFrom, limitTake);
+		return articleDao.getPrintArticles(boardId, searchType, keyword, limitFrom, limitTake);
 	}
 
 	// WRITE

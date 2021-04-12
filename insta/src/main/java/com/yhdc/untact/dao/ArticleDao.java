@@ -15,12 +15,12 @@ public interface ArticleDao {
 
 	int getLastInsertId();
 
-	int getArticleCount(@Param("id") int id, @Param("keyword") String keyword);
-
 	public Article getArticleById(@Param("id") int id);
 
-	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("keyword") String keyword,
-			@Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
+	int getArticleCount(@Param("id") int id, @Param("searchType") String searchType, @Param("keyword") String keyword);
+
+	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("searchType") String searchType,
+			@Param("keyword") String keyword, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
 	public int writeArticle(@Param("boardId") int boardId, @Param("memberId") int memberId,
 			@Param("title") String title, @Param("content") String content);
