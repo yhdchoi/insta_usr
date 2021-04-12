@@ -11,26 +11,23 @@ import com.yhdc.untact.dto.Board;
 @Mapper
 public interface ArticleDao {
 
-
 	Board getBoardById(@Param("id") int id);
 
 	int getLastInsertId();
-	
-	int getArticleCount(@Param("id") int id);
-	
-	public int writeArticle(@Param("boardId") int boardId, 
-			@Param("memberId") int memberId, 
-			@Param("title") String title, 
-			@Param("content") String content);
 
-	public boolean modifyArticle(@Param("id") Integer id, 
-			@Param("title") String title, 
+	int getArticleCount(@Param("id") int id, @Param("keyword") String keyword);
+
+	public Article getArticleById(@Param("id") int id);
+
+	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("keyword") String keyword,
+			@Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
+
+	public int writeArticle(@Param("boardId") int boardId, @Param("memberId") int memberId,
+			@Param("title") String title, @Param("content") String content);
+
+	public boolean modifyArticle(@Param("id") Integer id, @Param("title") String title,
 			@Param("content") String content);
 
 	public void deleteArticleById(@Param("id") int id);
 
-	public Article getArticleById(@Param("id") int id);
-
-	List<Article> getPrintArticles(@Param("boardId") int boardId, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
-	
 }

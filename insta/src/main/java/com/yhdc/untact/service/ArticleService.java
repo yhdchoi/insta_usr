@@ -15,10 +15,10 @@ public class ArticleService {
 
 	@Autowired
 	private ArticleDao articleDao;
-	
+
 	// CHECK
 	private boolean isEmpty(Article article) {
-		
+
 		if (article == null) {
 			return true;
 		} else if (article.isDelStatus()) {
@@ -31,17 +31,22 @@ public class ArticleService {
 	public Board getBoardById(int boardId) {
 		return articleDao.getBoardById(boardId);
 	}
-	
+
 	// GET
 	public Article getArticleById(int id) {
 		return articleDao.getArticleById(id);
 	}
-	
-	public int getArticleCount(int boardId) {
-		return articleDao.getArticleCount(boardId);
+
+	public int getArticleCount(int boardId, String keyword) {
+		return articleDao.getArticleCount(boardId, keyword);
 	}
-	
-		
+
+	public List<Article> getPrintArticles(int boardId, String keyword, int itemsInPage, int page) {
+		int limitFrom = (page - 1) * itemsInPage;
+		int limitTake = itemsInPage;
+		return articleDao.getPrintArticles(boardId, keyword, limitFrom, limitTake);
+	}
+
 	// WRITE
 	public ResultData writeArticle(String title, String content) {
 		int id = articleDao.getLastInsertId();
@@ -71,16 +76,10 @@ public class ArticleService {
 		if (isEmpty(article)) {
 			return new ResultData("F-1", id + "번 글은 존재하지 않습니다.", "id", id);
 		}
-		
+
 		articleDao.deleteArticleById(id);
 
 		return new ResultData("S-1", id + "번 글이 삭제되었습다.", "id", id, "boardId", article.getBoardId());
-	}
-
-	public List<Article> getPrintArticles(int boardId, int itemsInPage, int page) {
-		int limitFrom = (page-1)*itemsInPage;
-		int limitTake = itemsInPage;
-		return articleDao.getPrintArticles(boardId, limitFrom, limitTake);
 	}
 
 }

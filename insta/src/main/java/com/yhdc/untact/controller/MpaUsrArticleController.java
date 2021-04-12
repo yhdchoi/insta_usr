@@ -21,35 +21,39 @@ public class MpaUsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-	
+
 	// MSG
 	private String msgBack(HttpServletRequest req, String msg) {
 		req.setAttribute("msg", msg);
 		req.setAttribute("historyBack", true);
 		return "common/redirect";
 	}
-	
+
 	private String msgReplace(HttpServletRequest req, String msg, String replaceUrl) {
 		req.setAttribute("msg", msg);
 		req.setAttribute("replaceUrl", replaceUrl);
 		return "common/redirect";
 	}
-	
-		
+
 	// LIST
 	@RequestMapping("/usr/article/list")
-	public String doGetList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page) {
+	public String doGetList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String keyword,
+			@RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoardById(boardId);
-		
+
 		if (board == null) {
 			return msgBack(req, boardId + "번 게시판은 존제하지 않습니다.");
 		}
 		req.setAttribute("board", board);
-		
-		int totalArticleCount = articleService.getArticleCount(boardId);
-		
+
+		int totalArticleCount = articleService.getArticleCount(boardId, keyword);
+
+		if (keyword == null || keyword.trim().length() == 0) {
+
+		}
+
 		req.setAttribute("totalArticleCount", totalArticleCount);
-		
+
 		// MAX NUMBER OF POSTS IN A PAGE
 		int itemsInPage = 20;
 		// TOTAL NUMBER OF PAGE
@@ -59,12 +63,12 @@ public class MpaUsrArticleController {
 		req.setAttribute("page", page);
 		req.setAttribute("totalPage", totalPage);
 
-		List<Article> articles = articleService.getPrintArticles(boardId, itemsInPage, page);
+		List<Article> articles = articleService.getPrintArticles(boardId, keyword, itemsInPage, page);
 
 		System.out.println("articles : " + articles);
 
 		req.setAttribute("articles", articles);
-		
+
 		return "/usr/article/list";
 	}
 
@@ -85,7 +89,7 @@ public class MpaUsrArticleController {
 
 		return new ResultData("S-1", article.getId() + "번 글 입니다.", "article", article);
 	}
-	
+
 	// WRITE
 	@RequestMapping("/mpaUsr/article/doPost")
 	@ResponseBody
@@ -134,18 +138,16 @@ public class MpaUsrArticleController {
 		if (Util.isEmpty(id)) {
 			return msgBack(req, "번호를 입력해 주세요.");
 		}
-		
+
 		ResultData rd = articleService.deleteArticleById(id);
-		
+
 		if (rd.isFail()) {
 			return msgBack(req, rd.getMsg());
 		}
-		
+
 		String redirectUrl = "../aricle/doGetList?boardId=" + rd.getBody().get("boardId");
 
 		return msgReplace(req, rd.getMsg(), redirectUrl);
 	}
-
-
 
 }
