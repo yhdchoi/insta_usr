@@ -12,7 +12,7 @@ import com.yhdc.untact.dto.Board;
 public interface ArticleDao {
 
 
-	Board getBoardById(@Param("boardId") int boardI);
+	Board getBoardById(@Param("id") int id);
 
 	int getLastInsertId();
 	
@@ -21,11 +21,11 @@ public interface ArticleDao {
 	public int writeArticle(@Param("boardId") int boardId, 
 			@Param("memberId") int memberId, 
 			@Param("title") String title, 
-			@Param("body") String body);
+			@Param("content") String content);
 
 	public boolean modifyArticle(@Param("id") Integer id, 
 			@Param("title") String title, 
-			@Param("body") String body);
+			@Param("content") String content);
 
 	public void deleteArticleById(@Param("id") int id);
 

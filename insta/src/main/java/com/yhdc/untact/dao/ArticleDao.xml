@@ -12,14 +12,14 @@
 		boardId = #{boardId},
 		memberId = #{memberId},
 		title = #{title},
-		body = #{body};
+		content = #{content};
 	</insert>
 	
 	<update id="editArticle">
 		UPDATE article
 		SET updateDate = NOW(),
 		title = #{title},
-		body = #{body},
+		content = #{content},
 		WHERE id = #{id};
 	</update>
 	

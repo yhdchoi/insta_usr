@@ -12,7 +12,7 @@ public class Article {
 	private int boardId;
 	private int memberId;
 	private String title;
-	private String body;
+	private String content;
 	private boolean blindStatus;
     private String blindDate;
     private boolean delStatus;

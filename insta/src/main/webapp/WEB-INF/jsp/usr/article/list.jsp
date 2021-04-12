@@ -10,12 +10,12 @@
 <div class="section section-article-list">
 	<div class="container mx-auto">
 		<div class="total-items">
-			<span>TOTAL ITEMS : </span> 
+			<span>TOTAL NUMBER OF ARTICLES : </span> 
 			<span>${totalArticleCount}</span>			
 		</div>
 		
 		<div class="total-pages">
-			<span>TOTAL PAGES : </span> 
+			<span>TOTAL NUMBER OF PAGES : </span> 
 			<span>${totalPage}</span>			
 		</div>
 

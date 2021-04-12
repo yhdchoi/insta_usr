@@ -37,8 +37,8 @@ public class MpaUsrArticleController {
 	
 		
 	// LIST
-	@RequestMapping("/usr/article/doGetList")
-	public String doGetList(HttpServletRequest req, int boardId, @RequestParam(defaultValue = "1") int page) {
+	@RequestMapping("/usr/article/list")
+	public String doGetList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoardById(boardId);
 		
 		if (board == null) {
@@ -65,7 +65,7 @@ public class MpaUsrArticleController {
 
 		req.setAttribute("articles", articles);
 		
-		return "/usr/article/doGetlist";
+		return "/usr/article/list";
 	}
 
 	// GET
@@ -89,23 +89,23 @@ public class MpaUsrArticleController {
 	// WRITE
 	@RequestMapping("/mpaUsr/article/doPost")
 	@ResponseBody
-	public ResultData doPost(String title, String body) {
+	public ResultData doPost(String title, String content) {
 
 		if (Util.isEmpty(title)) {
 			return new ResultData("F-1", "제목을 작성해 주세요.");
 		}
 
-		if (Util.isEmpty(body)) {
+		if (Util.isEmpty(content)) {
 			return new ResultData("F-2", "내용을 작성해 주세요.");
 		}
 
-		return articleService.writeArticle(title, body);
+		return articleService.writeArticle(title, content);
 	}
 
 	// EDIT
 	@RequestMapping("/mpaUsr/article/doPut")
 	@ResponseBody
-	public ResultData doPut(Integer id, String title, String body) {
+	public ResultData doPut(Integer id, String title, String content) {
 
 		if (Util.isEmpty(id)) {
 			return new ResultData("F-1", "id을 작성해 주세요.");
@@ -115,7 +115,7 @@ public class MpaUsrArticleController {
 			return new ResultData("F-1", "제목을 작성해 주세요.");
 		}
 
-		if (Util.isEmpty(body)) {
+		if (Util.isEmpty(content)) {
 			return new ResultData("F-1", "내용을 작성해 주세요.");
 		}
 
@@ -124,7 +124,7 @@ public class MpaUsrArticleController {
 		if (article == null) {
 			return new ResultData("F-1", id + "번 글은 존재하지 않습니다.", "id", id);
 		}
-		return articleService.editArticle(id, title, body);
+		return articleService.editArticle(id, title, content);
 	}
 
 	// DELETE
