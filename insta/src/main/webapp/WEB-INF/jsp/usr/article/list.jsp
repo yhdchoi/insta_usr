@@ -11,7 +11,7 @@
 	<div class="container mx-auto">
 		<div class="total-items">
 			<span>TOTAL ITEMS : </span> 
-			<span>${totalItemsCount}</span>			
+			<span>${totalArticleCount}</span>			
 		</div>
 		
 		<div class="total-pages">
