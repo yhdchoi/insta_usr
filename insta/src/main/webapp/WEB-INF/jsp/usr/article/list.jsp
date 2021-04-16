@@ -76,6 +76,15 @@
 			</c:forEach>
 		</div>
 		
+		<div class="pages">
+			<c:forEach var="i" begin="1" end="${totalPage}">
+				<c:set var="url" value="?boardId=${board.id}" />
+				<c:set var="url" value="${url}&seachType=${param.searchType}" />
+				<c:set var="url" value="${url}&keyword=${param.keyword}" />
+				<c:set var="url" value="${url}&page=${i}" />
+				<a class="text-lg ${page == i ? 'text-red-500' : ''}" href="${url}">${i}</a>
+			</c:forEach>
+		</div>
 	</div>
 </div>
 
