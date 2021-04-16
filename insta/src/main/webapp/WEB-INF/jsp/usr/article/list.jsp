@@ -29,7 +29,8 @@
 		
 		<div class="search-for-box mt-2">
 			<form action="" class="grid gap-2">
-				<input class="input input-bordered" name="searchKeyword" type="text" placeholder="Enter keyword" maxlength="50" />
+				<input name="boardId" type="hidden" value="${board.id}" />
+				<input class="input input-bordered" name="keyword" type="text" value="${param.keyword}" placeholder="Enter Keyword" Maxlength="10"/>
 				<input class="btn btn-sm btn-primary" type="submit" value="search" />
 			</form>
 		
