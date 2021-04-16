@@ -27,7 +27,15 @@
 		<hr />
 		<hr />
 		
-		<div class="articles">
+		<div class="search-for-box mt-2">
+			<form action="" class="grid gap-2">
+				<input class="input input-bordered" name="searchKeyword" type="text" placeholder="Enter keyword" maxlength="50" />
+				<input class="btn btn-sm btn-primary" type="submit" value="search" />
+			</form>
+		
+		</div>
+		
+		<div class="articles mt-2">
 			<c:forEach items="${articles}" var="article">
 				<div>
 					ID : ${article.id}<br>
