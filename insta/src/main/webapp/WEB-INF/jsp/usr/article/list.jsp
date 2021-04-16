@@ -30,13 +30,40 @@
 		<div class="search-for-box mt-2">
 			<form action="" class="grid gap-2">
 				<input name="boardId" type="hidden" value="${board.id}" />
-				<input class="input input-bordered" name="keyword" type="text" value="${param.keyword}" placeholder="Enter Keyword" Maxlength="10"/>
-				<input class="btn btn-sm btn-primary" type="submit" value="search" />
+				
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Option</span>
+					</label>
+					<select name="searchType" class="select select-bordered">
+						<option value="titleAndBody">Title+Content</option>
+						<option value="title">Title</option>
+						<option value="Content">Content</option>
+					</select>
+					<script>
+						const param_searchType = '${param.searchType}';
+						if ( param_searchType.length > 0 ) {
+							$('.search-form-box from [name="searchType"]')
+							.val('${param.searchType}');
+						}
+					</script>
+				</div>
+				
+				<div class="form-control">
+					<input type="text" class="input input-bodered" name="keyword" value="${param.keyword}" placeholder="Enter keyword" maxlength="50"/>
+				</div>
+				
+				<div class="form-control">
+					<input type="submit" class="btn btn-sm btn-primary" value="search"/>
+				</div>
 			</form>
 		
 		</div>
 		
 		<div class="articles mt-2">
+			<c:if test="${articles==null || articles.size()==0}">
+				There are no results.
+			</c:if>
 			<c:forEach items="${articles}" var="article">
 				<div>
 					ID : ${article.id}<br>
